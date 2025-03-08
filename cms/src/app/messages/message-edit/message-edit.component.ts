@@ -13,15 +13,15 @@ import { MessageService } from '../message.service';
 })
 export class MessageEditComponent {
 
-  @ViewChild('subject', { static: false }) subject: ElementRef;
-  @ViewChild('msgText', { static: false }) msgText: ElementRef;
+  @ViewChild('subject') subject: ElementRef;
+  @ViewChild('msgText') msgText: ElementRef;
 
   constructor(private messageService: MessageService) {}
 
   onSendMessage() {
     const subject = this.subject.nativeElement.value;
     const msgText = this.msgText.nativeElement.value;
-    const message = new Message("1" , subject, msgText, "Irina");
+    const message = new Message("1" , subject, msgText, "9");
     this.messageService.addMessage(message);
   }
 

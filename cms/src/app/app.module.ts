@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -20,6 +21,8 @@ import { DocumentEditComponent } from './documents/document-edit/document-edit.c
 import { ContactEditComponent } from './contacts/contact-edit/contact-edit.component';
 import { FormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ContactsFilterPipe } from './contacts/contacts-filter.pipe';
+
 
 
 @NgModule({
@@ -39,6 +42,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MessageListComponent,
     DocumentEditComponent,
     ContactEditComponent,
+    ContactsFilterPipe,
      
   ],
   imports: [
@@ -46,7 +50,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     AppRoutingModule,
     DropdownDirective,
     FormsModule,
-    DragDropModule
+    DragDropModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
