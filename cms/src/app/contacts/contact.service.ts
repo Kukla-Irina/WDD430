@@ -11,27 +11,26 @@ export class ContactService {
   contactListChangedEvent = new Subject<Contact[]>();
 
   private contactsUrl =
-    'https://angularirina-default-rtdb.firebaseio.com/contacts.json';
+    'http://localhost:3000/contacts';
   private contacts: Contact[] = [];
   private maxContactId: number;
 
   constructor(private http: HttpClient) {}
 
-  getContacts(): Contact[] {
+  getContacts() {
     this.http
-      .get<Contact[]>(this.contactsUrl)
-      .subscribe((contacts: Contact[]) => {
-        this.contacts = contacts;
-        this.maxContactId = this.getMaxId();
-        this.contacts.sort((a, b) => {
-          if (a < b) return -1;
-          if (a > b) return 1;
-          return 0;
-        });
-        this.contactListChangedEvent.next(this.contacts.slice());
+      .get<{ message: string; contacts: Contact[] }>(this.contactsUrl)
+      .subscribe({
+        next: (res) => {
+          console.log(res.message);
+          this.contacts = res.contacts;
+          this.sortAndSend();
+        },
+        error: (err) => {
+          console.error(err.message);
+          console.error(err.error);
+        },
       });
-
-    return this.contacts.slice();
   }
 
   storeContacts() {
@@ -49,16 +48,27 @@ export class ContactService {
       });
   }
 
-  getContact(id: string): Contact | null {
-    return this.contacts.find(contact => contact.id === id) || null;
+  getContact(id: string): Contact | undefined {
+    return this.contacts.find((c) => c.id === id || c._id === id);
   }
 
   deleteContact(contact: Contact) {
     if (!contact) return;
     const pos = this.contacts.indexOf(contact);
     if (pos < 0) return;
-    this.contacts.splice(pos, 1);
-    this.storeContacts();
+    this.http
+      .delete<{ message: string }>(`${this.contactsUrl}/${contact.id}`)
+      .subscribe({
+        next: (res) => {
+          console.log(res.message);
+          this.contacts.splice(pos, 1);
+          this.sortAndSend();
+        },
+        error: (err) => {
+          console.error(err.message);
+          console.error(err.error);
+        },
+      });
   }
 
   getMaxId(): number {
@@ -73,28 +83,62 @@ export class ContactService {
   }
 
   addContact(newContact: Contact) {
-    if (newContact === null || newContact === undefined) return;
-    this.maxContactId++;
-    newContact.id = `${this.maxContactId}`;
-    this.contacts.push(newContact);
-    this.storeContacts();
+    if (!newContact) return;
+    newContact.id = '';
+    this.http
+      .post<{ message: string; contact: Contact }>(
+        this.contactsUrl,
+        newContact,
+        { headers: new HttpHeaders().set('Content-Type', 'application/json') }
+      )
+      .subscribe({
+        next: (res) => {
+          console.log(res.message);
+          this.contacts.push(res.contact);
+          this.sortAndSend();
+        },
+        error: (err) => {
+          console.error(err.message);
+          console.error(err.error);
+        },
+      });
   }
 
   updateContact(original: Contact, newContact: Contact) {
-    if (
-      newContact === null ||
-      newContact === undefined ||
-      original === null ||
-      original === undefined
-    ) {
-      return;
-    }
+    if (!newContact || !original) return;
     const pos = this.contacts.indexOf(original);
     if (pos < 0) return;
 
     newContact.id = original.id;
-    this.contacts[pos] = newContact;
-    this.storeContacts();
+    newContact._id = original._id;
+    this.http
+      .put<{ message: string }>(
+        `${this.contactsUrl}/${original.id}`,
+        newContact,
+        {
+          headers: new HttpHeaders().set('Content-Type', 'application/json'),
+        }
+      )
+      .subscribe({
+        next: (res) => {
+          console.log(res.message);
+          this.contacts[pos] = newContact;
+          this.sortAndSend();
+        },
+        error: (err) => {
+          console.error(err.message);
+          console.error(err.error);
+        },
+      });
+  }
+
+  sortAndSend() {
+    this.contacts.sort((a, b) => {
+      if (a < b) return -1;
+      if (a > b) return 1;
+      return 0;
+    });
+    this.contactListChangedEvent.next(this.contacts.slice());
   }
 
 }

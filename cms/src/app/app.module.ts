@@ -22,6 +22,7 @@ import { ContactEditComponent } from './contacts/contact-edit/contact-edit.compo
 import { FormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ContactsFilterPipe } from './contacts/contacts-filter.pipe';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 
 
@@ -51,7 +52,8 @@ import { ContactsFilterPipe } from './contacts/contacts-filter.pipe';
     DropdownDirective,
     FormsModule,
     DragDropModule,
-    HttpClientModule
+    HttpClientModule,
+    ScrollingModule 
   ],
   providers: [],
   bootstrap: [AppComponent]

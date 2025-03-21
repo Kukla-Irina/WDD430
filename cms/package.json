@@ -11,7 +11,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^19.0.0",
-    "@angular/cdk": "^19.2.1",
+    "@angular/cdk": "^19.2.5",
     "@angular/common": "^19.0.0",
     "@angular/compiler": "^19.0.0",
     "@angular/core": "^19.0.0",
@@ -23,7 +23,11 @@
     "bootstrap": "^3.4.1",
     "cookie-parser": "^1.4.7",
     "express": "^4.21.2",
+    "mongodb": "^6.15.0",
+    "mongoose": "^6.7.3",
+    "mongoose-unique-validator": "^4.0.1",
     "morgan": "^1.10.0",
+    "punycode": "^2.3.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"

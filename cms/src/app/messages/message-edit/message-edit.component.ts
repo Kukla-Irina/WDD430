@@ -21,7 +21,7 @@ export class MessageEditComponent {
   onSendMessage() {
     const subject = this.subject.nativeElement.value;
     const msgText = this.msgText.nativeElement.value;
-    const message = new Message("1" , subject, msgText, "9");
+    const message = new Message(subject, msgText, "67dc35471c4156eeb3f9df05");
     this.messageService.addMessage(message);
   }
 
