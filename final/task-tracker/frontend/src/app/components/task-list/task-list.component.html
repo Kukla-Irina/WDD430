@@ -1,11 +1,18 @@
 <div class="container">
-    <h2>Task List</h2>
-    <ul class="list-group">
-      <li *ngFor="let task of tasks" class="list-group-item d-flex justify-content-between align-items-center">
-        <span [class.text-muted]="task.completed" (click)="toggleComplete(task)" style="cursor: pointer;">
-          {{ task.title }}
-        </span>
-        <button class="btn btn-danger btn-sm" (click)="deleteTask(task._id!)">Delete</button>
-      </li>
-    </ul>
-  </div>
+  <h2>Task List</h2>
+  <ul class="list-group">
+    <li *ngFor="let task of tasks" class="list-group-item" style="position: relative;">
+      <span [ngStyle]="{'text-decoration': task.completed ? 'line-through' : 'none'}"
+            [class.text-muted]="task.completed"
+            (click)="toggleComplete(task)" 
+            style="cursor: pointer; display: inline-block; vertical-align: middle;">
+        {{ task.title }}
+      </span>
+      <button class="btn btn-danger btn-sm pull-right" 
+              (click)="deleteTask(task._id!)" 
+              style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%);">
+        Delete
+      </button>
+    </li>
+  </ul>
+</div>
