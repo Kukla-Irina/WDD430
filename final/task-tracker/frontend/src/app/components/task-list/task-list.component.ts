@@ -42,7 +42,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
   }
 
   startPolling(): void {
-    this.pollSubscription = interval(2000).subscribe(() => {
+    this.pollSubscription = interval(1000).subscribe(() => {
       this.fetchTasks(); 
     });
   }
